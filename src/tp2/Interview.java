@@ -6,6 +6,8 @@ import java.util.Set;
 
 public final class Interview {
 
+    private int test;
+
     /** TODO Worst Case : O(n)
      * Is valid if you flip the number upside down.
      */
