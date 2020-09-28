@@ -3,7 +3,7 @@ Laboratoire : 2
 
 Cours : INF2010 Structures de données et algorithmes
 
-Partenaire : [Maxcence Lefevre](https://github.com/Solonioka)
+Partenaire : [Maxence Lefevre](https://github.com/Solonioka)
 
 
 ## Objectifs
