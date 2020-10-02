@@ -189,7 +189,7 @@ public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
      * Removes all nodes contained within the map
      */
     public void clear() {
-        //this = new HashMap<>();
+        this = new HashMap();
     }
 
     static class Node<KeyType, DataType> {
@@ -213,13 +213,18 @@ public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
 // for (Key key : map) { doSomethingWith(key); }
     private class HashMapIterator implements Iterator<KeyType> {
         // TODO: Add any relevant data structures to remember where we are in the list.
+        private int position = 0;//ajout
+        private int posMap = 0;//ajout
 
         /**
          * TODO Worst Case : O(n)
          * Determine if there is a new element remaining in the hashmap.
          */
         public boolean hasNext() {
-            return false;
+            while (map[posMap].next != null) {
+
+            }
+            return position < size;
         }
 
         /**
@@ -227,7 +232,11 @@ public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
          * Return the next new key in the hashmap.
          */
         public KeyType next() {
+            if (!hasNext()) {
+                return null;
+            }
             return null;
         }
     }
 }
+// it.next()
