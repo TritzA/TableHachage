@@ -13,7 +13,9 @@ public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
     private int capacity;
     private final float loadFactor; // Compression factor
 
-    public HashMap() { this(DEFAULT_CAPACITY, DEFAULT_LOAD_FACTOR); }
+    public HashMap() {
+        this(DEFAULT_CAPACITY, DEFAULT_LOAD_FACTOR);
+    }
 
     public HashMap(int initialCapacity) {
         this(initialCapacity > 0 ? initialCapacity : DEFAULT_CAPACITY,
@@ -29,10 +31,11 @@ public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
     /**
      * Finds the index attached to a particular key
      * This is the hashing function ("Fonction de dispersement")
+     *
      * @param key Value used to access to a particular instance of a DataType within map
      * @return Index value where this key should be placed in attribute map
      */
-    private int hash(KeyType key){
+    private int hash(KeyType key) {
         int keyHash = key.hashCode() % capacity;
         return Math.abs(keyHash);
     }
@@ -54,7 +57,7 @@ public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
     /**
      * @return Current reserved space for the map
      */
-    public int capacity(){
+    public int capacity() {
         return capacity;
     }
 
@@ -65,30 +68,68 @@ public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
         return size == 0;
     }
 
-    /** TODO Average Case : O(1)
+    /**
+     * TODO Average Case : O(1)
      * Find the next prime after increasing the capacity by CAPACITY_INCREASE_FACTOR (multiplication)
      */
     private void increaseCapacity() {
-        // ...
+        int n = this.capacity * this.CAPACITY_INCREASE_FACTOR;
+        if (n % 2 == 0) {
+            n++;
+        }
+        while (!ispremier(n)) {
+            n += 2;
+        }
+        this.capacity = n;
     }
 
-    /** TODO Average Case : O(n)
+    private boolean ispremier(int n) {
+        if (n < 2) {
+            return false;
+        } else if (n < 9) {
+            return true;
+        } else if (n % 3 == 0) {
+            return false;
+        } else {
+            int r = (int) Math.floor(Math.sqrt(n));
+            int f = 5;
+            while (f <= r) {
+                if ((n % f) == 0) {
+                    return false;
+                }
+                if ((n % (f + 2)) == 0) {
+                    return false;
+                }
+                f += 6;
+            }
+            return true;
+        }
+    }
+
+    /**
+     * TODO Average Case : O(n)
      * Increases capacity by CAPACITY_INCREASE_FACTOR (multiplication) and
      * reassigns all contained values within the new map
      */
     private void rehash() {
-        // ...
+        //ArrayList<String> arlist = new ArrayList<String>( );
     }
 
-    /** TODO Average Case : O(1)
+    /**
+     * TODO Average Case : O(1)
      * Finds if map contains a key
+     *
      * @param key Key which we want to know if exists within map
      * @return if key is already used in map
      */
-    public boolean containsKey(KeyType key) { return false; }
+    public boolean containsKey(KeyType key) {
+        return false;
+    }
 
-    /** TODO Average Case : O(1)
+    /**
+     * TODO Average Case : O(1)
      * Finds the value attached to a key
+     *
      * @param key Key which we want to have its value
      * @return DataType instance attached to key (null if not found)
      */
@@ -96,8 +137,10 @@ public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
         return null;
     }
 
-    /** TODO Average Case : O(1) , Worst case : O(n)
+    /**
+     * TODO Average Case : O(1) , Worst case : O(n)
      * Assigns a value to a key
+     *
      * @param key Key which will have its value assigned or reassigned
      * @return Old DataType instance at key (null if none existed)
      */
@@ -105,8 +148,10 @@ public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
         return null;
     }
 
-    /** TODO Average Case : O(1)
+    /**
+     * TODO Average Case : O(1)
      * Removes the node attached to a key
+     *
      * @param key Key which is contained in the node to remove
      * @return Old DataType instance at key (null if none existed)
      */
@@ -114,7 +159,8 @@ public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
         return null;
     }
 
-    /** TODO Worst Case : O(1)
+    /**
+     * TODO Worst Case : O(1)
      * Removes all nodes contained within the map
      */
     public void clear() {
@@ -126,8 +172,7 @@ public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
         DataType data;
         Node<KeyType, DataType> next; // Pointer to the next node within a Linked List
 
-        Node(KeyType key, DataType data)
-        {
+        Node(KeyType key, DataType data) {
             this.key = key;
             this.data = data;
             next = null;
@@ -140,18 +185,20 @@ public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
     }
 
     // Iterators are used to iterate over collections like so:
-    // for (Key key : map) { doSomethingWith(key); }
+// for (Key key : map) { doSomethingWith(key); }
     private class HashMapIterator implements Iterator<KeyType> {
         // TODO: Add any relevant data structures to remember where we are in the list.
 
-        /** TODO Worst Case : O(n)
+        /**
+         * TODO Worst Case : O(n)
          * Determine if there is a new element remaining in the hashmap.
          */
         public boolean hasNext() {
             return false;
         }
 
-        /** TODO Worst Case : O(n)
+        /**
+         * TODO Worst Case : O(n)
          * Return the next new key in the hashmap.
          */
         public KeyType next() {
