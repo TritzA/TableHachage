@@ -112,7 +112,14 @@ public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
      * reassigns all contained values within the new map
      */
     private void rehash() {
-        //ArrayList<String> arlist = new ArrayList<String>( );
+        this.increaseCapacity();
+        HashMap map = new HashMap(); // doit avoir la mê
+
+        //for (DataType element:this) {
+          //  map.put(element);
+        //}
+        //creer une nouvelle hash map de dimention capacity*increase_factor
+        //copier l'ancienne dans la nouvelle
     }
 
     /**
@@ -134,6 +141,10 @@ public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
      * @return DataType instance attached to key (null if not found)
      */
     public DataType get(KeyType key) {
+        Node<KeyType, DataType> valeur = this.map[this.hash(key)];
+        if (valeur != null){// necessaire?
+            return valeur.data;
+        }
         return null;
     }
 
