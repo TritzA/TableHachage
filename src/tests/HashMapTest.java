@@ -28,7 +28,7 @@ class HashMapTest {
         Integer value = 1;
         map.put("myKey", value);
         Integer valueInMap = map.get("myKey");
-
+        System.out.println(valueInMap);
         assertEquals(value, valueInMap);
         assertTrue(nullWithoutValue);
     }
