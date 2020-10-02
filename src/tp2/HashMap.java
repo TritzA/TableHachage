@@ -116,7 +116,7 @@ public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
         HashMap map = new HashMap(); // doit avoir la mê
 
         //for (DataType element:this) {
-          //  map.put(element);
+        //  map.put(element);
         //}
         //creer une nouvelle hash map de dimention capacity*increase_factor
         //copier l'ancienne dans la nouvelle
@@ -142,7 +142,7 @@ public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
      */
     public DataType get(KeyType key) {
         Node<KeyType, DataType> valeur = this.map[this.hash(key)];
-        if (valeur != null){// necessaire?
+        if (valeur != null) {// necessaire?
             return valeur.data;
         }
         return null;
@@ -156,7 +156,15 @@ public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
      * @return Old DataType instance at key (null if none existed)
      */
     public DataType put(KeyType key, DataType value) {
-        return null;
+        Node<KeyType, DataType> node = this.map[this.hash(key)];
+        if (node != null) {
+            this.map[this.hash(key)] = new Node<>(key, value);
+            return node.data;
+        } else {
+            this.map[this.hash(key)] = new Node<>(key, value);
+            size++;
+            return null;
+        }
     }
 
     /**
@@ -167,6 +175,12 @@ public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
      * @return Old DataType instance at key (null if none existed)
      */
     public DataType remove(KeyType key) {
+        Node<KeyType, DataType> node = this.map[this.hash(key)];
+        if (node != null) {
+            this.map[this.hash(key)] = null;
+            size--;
+            return node.data;
+        }
         return null;
     }
 
@@ -175,7 +189,7 @@ public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
      * Removes all nodes contained within the map
      */
     public void clear() {
-        // ...
+        //this = new HashMap<>();
     }
 
     static class Node<KeyType, DataType> {
