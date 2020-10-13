@@ -109,6 +109,7 @@ class HashMapTest {
         boolean canGetAllValues = true;
         for (int i = 0; i < n && canGetAllValues; ++i) {
             Integer value = map.get(new HashMapTest.KeyMock(i));
+            System.out.println(value);
             canGetAllValues = value != null && value.equals(i);
         }
 

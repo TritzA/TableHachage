@@ -186,7 +186,7 @@ public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
      * Removes all nodes contained within the map
      */
     public void clear() {
-        // ...
+        
     }
 
     static class Node<KeyType, DataType> {
