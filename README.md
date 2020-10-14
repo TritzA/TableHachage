@@ -1,5 +1,7 @@
 # TableHachage
 
+Implémentation et utilisation d'une table de hachage.
+
 Laboratoire : 2
 
 Cours : INF2010 Structures de données et algorithmes
