@@ -31,18 +31,9 @@ public final class Interview {
     private static boolean isIrreversible(String listOfNumbers) {
         if (listOfNumbers.contains("3"))
             return true;
-        else if (listOfNumbers.contains("4"))
+        else if (listOfNumbers.contains("4"f))
             return true;
         else return listOfNumbers.contains("7");
-    }
-
-    private static boolean isNumberLigal(char nb) {
-        if (nb == '3') {
-            return false;
-        } else if (nb == '4') {
-            return false;
-        }
-        return nb != '7';
     }
 
     /**
@@ -112,5 +103,14 @@ public final class Interview {
             }
             return true;
         }
+    }
+
+    private static boolean isNumberLigal(char nb) {
+        if (nb == '3') {
+            return false;
+        } else if (nb == '4') {
+            return false;
+        }
+        return nb != '7';
     }
 }
