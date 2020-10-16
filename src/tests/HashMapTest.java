@@ -160,7 +160,7 @@ class HashMapTest {
     }
 
     @Test
-    void containsKey() {
+    void Keycontains() {
         HashMap<String, Integer> map = new HashMap<String, Integer>();
 
         map.put("myKey", 1);
@@ -202,7 +202,6 @@ class HashMapTest {
 
         // Clear should not put capacity back to its initial value
         map.clear();
-
         assertEquals(map.capacity(), 23);
     }
 

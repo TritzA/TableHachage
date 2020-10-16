@@ -112,14 +112,17 @@ public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
      * reassigns all contained values within the new map
      */
     private void rehash() {
-        this.increaseCapacity();
-        HashMap map = new HashMap(); // doit avoir la mê
+        HashMap map = new HashMap(this.capacity);
 
-        //for (DataType element:this) {
-        //  map.put(element);
-        //}
-        //creer une nouvelle hash map de dimention capacity*increase_factor
-        //copier l'ancienne dans la nouvelle
+        map.increaseCapacity();
+
+        for (Node node : this.map) {
+            if (node != null)
+                map.put(node.key, node.data);
+        }
+        this.capacity = map.capacity;
+        this.map = map.map;
+        System.out.println(this.map);
     }
 
     /**
@@ -130,7 +133,21 @@ public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
      * @return if key is already used in map
      */
     public boolean containsKey(KeyType key) {
-        return false;
+        Node<KeyType, DataType> node = this.map[this.hash(key)]; // obtient le premier noeud grace à la clé
+        if (node != null) {
+            boolean mmCle = (node.key == key);
+            if (mmCle == false) {//si ne trouve pas la même clé dès le début
+                do {
+                    if (node.key.equals(key)) {
+                        return true;
+                    }
+                    node = node.next;
+                } while (node != null);
+            } else {
+                return true;//si la clé est retrouvé dès le début, retourner true
+            }
+        }
+        return false; // si ne la trouve pas au début ou dans le parcours
     }
 
     /**
@@ -141,9 +158,15 @@ public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
      * @return DataType instance attached to key (null if not found)
      */
     public DataType get(KeyType key) {
-        Node<KeyType, DataType> valeur = this.map[this.hash(key)];
-        if (valeur != null) {// necessaire?
-            return valeur.data;
+        Node<KeyType, DataType> node = this.map[this.hash(key)];
+        if (node != null) {
+            do {
+                if (node.key.equals(key)) {
+                    return node.data;
+                }
+                node = node.next;
+            } while (node != null);
+
         }
         return null;
     }
@@ -156,15 +179,41 @@ public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
      * @return Old DataType instance at key (null if none existed)
      */
     public DataType put(KeyType key, DataType value) {
-        Node<KeyType, DataType> node = this.map[this.hash(key)];
-        if (node != null) {
-            this.map[this.hash(key)] = new Node<>(key, value);
-            return node.data;
-        } else {
-            this.map[this.hash(key)] = new Node<>(key, value);
+        if (!containsKey(key)) {
+            size++;
+            //System.out.println(size * loadFactor);
+            if (this.needRehash()) {
+                System.out.println("On est la");
+                this.rehash();
+            }
+            size--;
+        }
+        Node<KeyType, DataType> node = this.map[this.hash(key)]; // obtient le premier noeud grace à la clé
+        if (node != null) {//collision ou deux clé égale
+            DataType old = node.data;
+            boolean mmCle = (node.key == key);
+
+            while (node.next != null && !mmCle) { // aller jusqu'au dernier noeud non-vide ou jusqu'à un noeuc ayant la mm clé
+                if (node.key == key) {
+                    mmCle = true;
+                } else {
+                    node = node.next;
+                }
+            }
+
+            // node vaut mtn le denier noeud non-null
+            if (mmCle == true) {
+                node.data = value;
+            } else {
+                node.next = new Node<>(key, value);
+            }
+            return old;
+        } else {//pas collision
+            this.map[this.hash(key)] = new Node<>(key, value);// faire fonctionner sans gérer les collisions
             size++;
             return null;
         }
+
     }
 
     /**
@@ -175,13 +224,26 @@ public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
      * @return Old DataType instance at key (null if none existed)
      */
     public DataType remove(KeyType key) {
-        Node<KeyType, DataType> node = this.map[this.hash(key)];
-        if (node != null) {
-            this.map[this.hash(key)] = null;
+        Node<KeyType, DataType> t = this.map[this.hash(key)];
+        Node<KeyType, DataType> p = null;
+
+        if (t != null && t.key.equals(key)) {
+            this.map[this.hash(key)] = t.next;
             size--;
-            return node.data;
+            return t.data;
         }
-        return null;
+
+        while (t != null && !t.key.equals(key)) {
+            p = t;
+            t = t.next;
+        }
+
+        if (t == null)
+            return null;
+
+        p.next = t.next;
+        size--;
+        return t.data;
     }
 
     /**
@@ -189,7 +251,8 @@ public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
      * Removes all nodes contained within the map
      */
     public void clear() {
-        this = new HashMap();
+        this.map = new Node[this.capacity];
+        size = 0;
     }
 
     static class Node<KeyType, DataType> {
@@ -239,4 +302,3 @@ public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
         }
     }
 }
-// it.next()
