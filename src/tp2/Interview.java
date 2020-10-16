@@ -31,7 +31,7 @@ public final class Interview {
     private static boolean isIrreversible(String listOfNumbers) {
         if (listOfNumbers.contains("3"))
             return true;
-        else if (listOfNumbers.contains("4"f))
+        else if (listOfNumbers.contains("4"))
             return true;
         else return listOfNumbers.contains("7");
     }
