@@ -1,10 +1,5 @@
 package tp2;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.util.Map;
-import java.util.Set;
-
 public final class Interview {
 
     /**
@@ -53,46 +48,36 @@ public final class Interview {
      */
     public static boolean isValidFlippedWithPermutation(String listOfNumbers) {
         int len = listOfNumbers.length();
-        int zero = 0, un = 0, deux = 0, trois = 0, quatre = 0, cinq = 0, six = 0, sept = 0, huit = 0, neuf = 0;
-        HashMap map = new HashMap<Integer, String>();
+        String allDigits = "0123456789";
+        String reversibleDigits = "01258";
+        HashMap map = new HashMap<Character, Integer>();
 
-        if (len % 2 == 0) {
+        //initialiser tous les compteurs à 0
+        for (int i = 0; i < allDigits.length(); i++) {
+            map.put(allDigits.charAt(i), 0);
+        }
+
+        if (len % 2 == 0) {//dans le cas ou on a un nombre pair de chiffres
             for (int i = 0; i < len; i++) {
 
                 //compter le nombre qu'on a de chaque chiffre
                 char nb = listOfNumbers.charAt(i);
                 if (!isNumberLigal(nb)) {
                     return false;
-                } else if (nb == '0') {
-                    zero++;
-                } else if (nb == '1') {
-                    un++;
-                } else if (nb == '2') {
-                    deux++;
-                } else if (nb == '5') {
-                    cinq++;
-                } else if (nb == '6') {
-                    six++;
-                } else if (nb == '8') {
-                    huit++;
-                } else if (nb == '9') {
-                    neuf++;
+                } else {
+                    map.put(nb, (int) map.get(nb) + 1);
                 }
             }
 
             // on doit avoir un nombre pair de bon nombre et un nombre de 6=au nombre de 9 pour que ça marche
-            if (zero % 2 != 0) {
-                return false;
-            } else if (un % 2 != 0) {
-                return false;
-            } else if (deux % 2 != 0) {
-                return false;
-            } else if (cinq % 2 != 0) {
-                return false;
-            } else if (huit % 2 != 0) {
-                return false;
-            } else return six == neuf;
-        } else {
+            for (int i = 0; i < reversibleDigits.length(); i++) {
+                if ((int) map.get(reversibleDigits.charAt(i)) % 2 != 0) {
+                    return false;
+                }
+            }
+            return (int) map.get('6') == (int) map.get('9');
+
+        } else {//dans le cas ou on a un nombre impair de chiffres
             boolean centerIsTaken = false;
             for (int i = 0; i < len; i++) {
 
@@ -100,55 +85,23 @@ public final class Interview {
                 char nb = listOfNumbers.charAt(i);
                 if (!isNumberLigal(nb)) {
                     return false;
-                } else if (nb == '0') {
-                    zero++;
-                } else if (nb == '1') {
-                    un++;
-                } else if (nb == '2') {
-                    deux++;
-                } else if (nb == '5') {
-                    cinq++;
-                } else if (nb == '6') {
-                    six++;
-                } else if (nb == '8') {
-                    huit++;
-                } else if (nb == '9') {
-                    neuf++;
+                } else {
+                    map.put(nb, (int) map.get(nb) + 1);
                 }
+
             }
             // on doit avoir un nombre pair de bon nombre et un nombre de 6=au nombre de 9 pour que ça marche
-            if (zero % 2 != 0) {
-                if (!centerIsTaken) {
-                    centerIsTaken = true;
-                } else {
-                    return false;
+            for (int i = 0; i < reversibleDigits.length(); i++) {
+                if ((int) map.get(reversibleDigits.charAt(i)) % 2 != 0) {
+                    if (!centerIsTaken) {
+                        centerIsTaken = true;
+                    } else {
+                        return false;
+                    }
                 }
-            } else if (un % 2 != 0) {
-                if (!centerIsTaken) {
-                    centerIsTaken = true;
-                } else {
-                    return false;
-                }
-            } else if (deux % 2 != 0) {
-                if (!centerIsTaken) {
-                    centerIsTaken = true;
-                } else {
-                    return false;
-                }
-            } else if (cinq % 2 != 0) {
-                if (!centerIsTaken) {
-                    centerIsTaken = true;
-                } else {
-                    return false;
-                }
-            } else if (huit % 2 != 0) {
-                if (!centerIsTaken) {
-                    centerIsTaken = true;
-                } else {
-                    return false;
-                }
-            } else if (six != neuf) {
-                if (!centerIsTaken && six != 0 && neuf != 0) {
+            }
+            if ((int) map.get('6') != (int) map.get('9')) {
+                if (!centerIsTaken && (int) map.get('6') != 0 && (int) map.get('9') != 0) {
                     centerIsTaken = true;
                 } else {
                     return false;
@@ -156,9 +109,5 @@ public final class Interview {
             }
             return true;
         }
-        /*
-        HashMap map = new HashMap<Integer, String>();
-         */
     }
 }
-// (0,0) (1,1) (2,5) (5,2) (6,9) (8,8)

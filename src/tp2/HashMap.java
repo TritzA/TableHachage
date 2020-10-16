@@ -122,9 +122,9 @@ public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
      * @return if key is already used in map
      */
     public boolean containsKey(KeyType key) {
-        if(this.get(key) == null){
+        if (this.get(key) == null) {
             return false;
-        }else{
+        } else {
             return true;
         }
     }
@@ -275,7 +275,7 @@ public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
          */
         public KeyType next() {
             Node<KeyType, DataType> node = map[posMap];
-            for(int i = 0; i<posNode; i++){
+            for (int i = 0; i < posNode; i++) {
                 node = node.next;
             } //while (node != null);
             return null;
