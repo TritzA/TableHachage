@@ -122,11 +122,7 @@ public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
      * @return if key is already used in map
      */
     public boolean containsKey(KeyType key) {
-        if (this.get(key) == null) {
-            return false;
-        } else {
-            return true;
-        }
+        return this.get(key) != null;
     }
 
     /**

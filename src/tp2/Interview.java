@@ -10,15 +10,18 @@ public final class Interview {
         if (isIrreversible(listOfNumbers)) {
             return false;
         }
-        for (int i = listOfNumbers.length() - 1; 0 <= i; i--) {
+        for (int i = listOfNumbers.length() - 1; listOfNumbers.length() / 2 <= i; i--) {
             char c = listOfNumbers.charAt(listOfNumbers.length() - 1 - i);
-            if (!(Character.getNumericValue(listOfNumbers.charAt(i)) == 6 && Character.getNumericValue(c) == 9) ||
-                    !(Character.getNumericValue(listOfNumbers.charAt(i)) == 9 && Character.getNumericValue(c) == 6)) {
+
+            boolean n = Character.getNumericValue(listOfNumbers.charAt(i)) == 9;
+            boolean s = Character.getNumericValue(listOfNumbers.charAt(i)) == 6;
+            if (!((s && Character.getNumericValue(c) == 9) ||
+                    (n && Character.getNumericValue(c) == 6))) {
                 if (listOfNumbers.charAt(i) != c) {
                     return false;
-                } else if (Character.getNumericValue(listOfNumbers.charAt(0)) == 6)
+                } else if (s)
                     return false;
-                else if (Character.getNumericValue(listOfNumbers.charAt(0)) == 9)
+                else if (n)
                     return false;
             }
         }
