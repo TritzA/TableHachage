@@ -56,7 +56,7 @@ public final class Interview {
 
                 //compter le nombre qu'on a de chaque chiffre
                 char nb = listOfNumbers.charAt(i);
-                if (!isNumberLigal(nb)) {
+                if (!isNumberLegal(nb)) {
                     return false;
                 } else {
                     map.put(nb, (int) map.get(nb) + 1);
@@ -77,7 +77,7 @@ public final class Interview {
 
                 //compter le nombre qu'on a de chaque chiffre
                 char nb = listOfNumbers.charAt(i);
-                if (!isNumberLigal(nb)) {
+                if (!isNumberLegal(nb)) {
                     return false;
                 } else {
                     map.put(nb, (int) map.get(nb) + 1);
@@ -105,7 +105,7 @@ public final class Interview {
         }
     }
 
-    private static boolean isNumberLigal(char nb) {
+    private static boolean isNumberLegal(char nb) {
         if (nb == '3') {
             return false;
         } else if (nb == '4') {

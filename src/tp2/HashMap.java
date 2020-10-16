@@ -249,9 +249,8 @@ public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
     // for (Key key : map) { doSomethingWith(key); }
     private class HashMapIterator implements Iterator<KeyType> {
         // TODO: Add any relevant data structures to remember where we are in the list.
-        private int posNode = 0;//ajout
-        private int posMap = 0;//ajout
-        private int expectedModCount = size();
+        private int posMap = 0;
+        private final int expectedModCount = size();
         private Node<KeyType, DataType> current = map[posMap];
 
         /**
