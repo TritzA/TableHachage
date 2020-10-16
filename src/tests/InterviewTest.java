@@ -87,6 +87,7 @@ class InterviewTest {
             LinearRegression regression = new LinearRegression(Xs.toArray(new Double[0]), Ys.toArray(new Double[0]));
             System.out.println(regression.R2());
             // The trend should be linear between input size and time => R2 ~= 1 => O(n).
+            regression.plot("Interview");
             assertEquals(regression.R2(), 1.0, 0.05);
         }, "Votre algorithme n'est probablement pas en O(n)");
     }

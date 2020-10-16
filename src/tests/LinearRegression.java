@@ -11,6 +11,10 @@
 package edu.princeton.cs.algs4;
 
 
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 /**
  *  The {@code LinearRegression} class performs a simple linear regression
  *  on an set of <em>n</em> data points (<em>y<sub>i</sub></em>, <em>x<sub>i</sub></em>).
@@ -29,6 +33,8 @@ public class LinearRegression {
     private final double intercept, slope;
     private final double r2;
     private final double svar0, svar1;
+    private Double[] x;
+    private Double[] y;
 
    /**
      * Performs a linear regression on the data points {@code (y[i], x[i])}.
@@ -38,6 +44,8 @@ public class LinearRegression {
      * @throws IllegalArgumentException if the lengths of the two arrays are not equal
      */
     public LinearRegression(Double[] x, Double[] y) {
+        this.x = x;
+        this.y = y;
         if (x.length != y.length) {
             throw new IllegalArgumentException("array lengths are not equal");
         }
@@ -151,6 +159,13 @@ public class LinearRegression {
         return s.toString();
     }
 
+    public void plot(String caller) throws IOException {
+        String xString = Arrays.stream(x).map(String::valueOf).collect(Collectors.joining(","));
+        String yString = Arrays.stream(y).map(String::valueOf).collect(Collectors.joining(","));
+        String command = "python src/tests/plot.py -c " + caller + " -x " + xString + " -y " + yString;
+        System.out.println(command);
+        Runtime.getRuntime().exec(command);
+    }
 }
 
 /******************************************************************************

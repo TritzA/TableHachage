@@ -260,7 +260,7 @@ class HashMapTest {
     @Test
     void testComplexityWithTime() {
         assertTimeoutPreemptively(Duration.ofSeconds(30), () -> {
-            HashMap<KeyMock, Integer> map = new HashMap<>();
+            HashMap<KeyMock, Integer> map = new HashMap<>(100000000);
             int increaseRate = 400000;
             int maxSize = 8000000;
             ArrayList<Double> Xs = new ArrayList<>();
@@ -283,6 +283,7 @@ class HashMapTest {
             LinearRegression regression = new LinearRegression(Xs.toArray(new Double[0]), Ys.toArray(new Double[0]));
             // The trend should be linear between input size and time => R2 ~= 1 => O(n).
             System.out.println(regression.R2());
+            regression.plot("Interview");
             assertEquals(regression.R2(), 1.0, 0.1);
         }, "Votre algorithme n'est probablement pas en O(n)");
     }
