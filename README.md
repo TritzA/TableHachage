@@ -23,6 +23,10 @@ IDE : [Intellij education](https://www.jetbrains.com/fr-fr/idea/download/#sectio
 
 ## Représentation
 
-Description de l'image.
+Complexité contante de notre algorithme.
 
-![alt text](https://github.com/TritzA/TableHachage/)
+![alt text](https://github.com/TritzA/TableHachage/blob/master/images/complexité.PNG)
+
+Deux autres exemples que notre algorithme a généré.
+
+![alt text](https://github.com/TritzA/TableHachage/blob/master/images/2complexité.PNG)
