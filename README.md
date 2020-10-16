@@ -2,7 +2,7 @@
 
 Implémentation et utilisation d'une table de hachage.
 
-Laboratoire : 2
+Laboratoire : 2/5
 
 Cours : INF2010 Structures de données et algorithmes
 
