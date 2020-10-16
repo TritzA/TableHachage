@@ -54,7 +54,7 @@ public final class Interview {
     public static boolean isValidFlippedWithPermutation(String listOfNumbers) {
         int len = listOfNumbers.length();
         int zero = 0, un = 0, deux = 0, trois = 0, quatre = 0, cinq = 0, six = 0, sept = 0, huit = 0, neuf = 0;
-
+        HashMap map = new HashMap<Integer, String>();
 
         if (len % 2 == 0) {
             for (int i = 0; i < len; i++) {

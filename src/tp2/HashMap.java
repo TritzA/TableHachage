@@ -8,7 +8,7 @@ public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
     private static final float DEFAULT_LOAD_FACTOR = 0.5f;
     private static final int CAPACITY_INCREASE_FACTOR = 2;
 
-    private Node[] map;
+    private Node<KeyType, DataType>[] map;
     private int size = 0;
     private int capacity;
     private final float loadFactor; // Compression factor
