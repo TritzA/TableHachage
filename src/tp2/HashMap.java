@@ -1,6 +1,8 @@
 package tp2;
 
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
 
@@ -243,38 +245,80 @@ public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
         return new HashMapIterator();
     }
 
-    //"L'itérateur est utilisé dans les tests. Il ne faut pas l'utiliser dans la classe HashMap"
     // Iterators are used to iterate over collections like so:
     // for (Key key : map) { doSomethingWith(key); }
     private class HashMapIterator implements Iterator<KeyType> {
         // TODO: Add any relevant data structures to remember where we are in the list.
         private int posNode = 0;//ajout
         private int posMap = 0;//ajout
+        private int expectedModCount = size();
+        private Node<KeyType, DataType> current = map[posMap];
 
         /**
          * TODO Worst Case : O(n)
          * Determine if there is a new element remaining in the hashmap.
          */
         public boolean hasNext() {
-            Node<KeyType, DataType> node = map[posMap];
-            do {
-                node = node.next;
-                posNode++;
-            } while (node != null);
-            System.out.println("itérateur ne fonctionne pas");
+            if (current == null) {
+                while (current == null && posMap < size) {
+                    posMap++;
+                    current = map[posMap];
+                }
+
+                if (current == null) {
+                    return false;
+                }
+
+                if (posMap < size) {
+                    return true;
+                }
+
+            } else {
+                if (current.next == null) {
+                    do {
+                        posMap++;
+                        current = map[posMap];
+                    } while (current == null && posMap < capacity - 1);
+
+                    if (current == null) {
+                        return false;
+                    }
+
+                    if (posMap < size) {
+                        return true;
+                    }
+
+                }
+            }
             return true;
         }
+
 
         /**
          * TODO Worst Case : O(n)
          * Return the next new key in the hashmap.
          */
         public KeyType next() {
-            Node<KeyType, DataType> node = map[posMap];
-            for (int i = 0; i < posNode; i++) {
-                node = node.next;
-            } //while (node != null);
-            return null;
+            if (size != expectedModCount) {
+                throw new ConcurrentModificationException();
+            }
+
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+
+            if (current.next == null) {
+                do {
+                    posMap++;
+                    current = map[posMap];
+                } while (current == null);
+
+                return current.key;
+            }
+
+            KeyType nextItem = current.key;
+            current = current.next;
+            return nextItem;
         }
     }
 }
