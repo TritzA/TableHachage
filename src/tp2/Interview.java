@@ -59,10 +59,10 @@ public final class Interview {
      * Could be valid if you try to flip the number upside down with one of the combinations.
      */
     public static boolean isValidFlippedWithPermutation(String listOfNumbers) {
-        System.out.println(listOfNumbers);
-        System.out.println(listOfNumbers.getClass().getName());
         int len = listOfNumbers.length();
         int zero = 0, un = 0, deux = 0, trois = 0, quatre = 0, cinq = 0, six = 0, sept = 0, huit = 0, neuf = 0;
+
+
         if (len % 2 == 0) {
             for (int i = 0; i < len; i++) {
 
@@ -70,103 +70,94 @@ public final class Interview {
                 char nb = listOfNumbers.charAt(i);
                 if (!isNumberLigal(nb)) {
                     return false;
-                }else if (nb == '0'){
+                } else if (nb == '0') {
                     zero++;
-                }else if (nb == '1'){
+                } else if (nb == '1') {
                     un++;
-                }else if (nb == '2'){
+                } else if (nb == '2') {
                     deux++;
-                }else if (nb == '5'){
+                } else if (nb == '5') {
                     cinq++;
-                }else if (nb == '6'){
+                } else if (nb == '6') {
                     six++;
-                }else if (nb == '8'){
+                } else if (nb == '8') {
                     huit++;
-                }else if (nb == '9'){
+                } else if (nb == '9') {
                     neuf++;
                 }
             }
 
             // on doit avoir un nombre pair de bon nombre et un nombre de 6=au nombre de 9 pour que ça marche
-            if(zero % 2 != 0){
+            if (zero % 2 != 0) {
                 return false;
-            }else if(un % 2 != 0){
+            } else if (un % 2 != 0) {
                 return false;
-            }else if(deux % 2 != 0){
+            } else if (deux % 2 != 0) {
                 return false;
-            }else if(cinq % 2 != 0){
+            } else if (cinq % 2 != 0) {
                 return false;
-            }else if(huit % 2 != 0){
+            } else if (huit % 2 != 0) {
                 return false;
-            }else return six == neuf;
+            } else return six == neuf;
         } else {
             boolean centerIsTaken = false;
             for (int i = 0; i < len; i++) {
 
                 //compter le nombre qu'on a de chaque chiffre
                 char nb = listOfNumbers.charAt(i);
-                System.out.println(nb);
-                System.out.println(listOfNumbers.charAt(i));
                 if (!isNumberLigal(nb)) {
-                    if (!centerIsTaken){
-                        centerIsTaken = true;
-                    }else {
-                        return false;
-                    }
-                }else if (nb == '0'){
+                    return false;
+                } else if (nb == '0') {
                     zero++;
-                }else if (nb == '1'){
+                } else if (nb == '1') {
                     un++;
-                }else if (nb == '2'){
+                } else if (nb == '2') {
                     deux++;
-                }else if (nb == '5'){
+                } else if (nb == '5') {
                     cinq++;
-                }else if (nb == '6'){
+                } else if (nb == '6') {
                     six++;
-                }else if (nb == '8'){
+                } else if (nb == '8') {
                     huit++;
-                }else if (nb == '9'){
+                } else if (nb == '9') {
                     neuf++;
                 }
             }
-            System.out.println("nb de huit "+huit);
-            System.out.println(huit % 2 != 0);
             // on doit avoir un nombre pair de bon nombre et un nombre de 6=au nombre de 9 pour que ça marche
-            if(zero % 2 != 0){
-                if (!centerIsTaken){
+            if (zero % 2 != 0) {
+                if (!centerIsTaken) {
                     centerIsTaken = true;
-                }else {
+                } else {
                     return false;
                 }
-            }else if(un % 2 != 0){
-                if (!centerIsTaken){
+            } else if (un % 2 != 0) {
+                if (!centerIsTaken) {
                     centerIsTaken = true;
-                }else {
+                } else {
                     return false;
                 }
-            }else if(deux % 2 != 0){
-                if (!centerIsTaken){
+            } else if (deux % 2 != 0) {
+                if (!centerIsTaken) {
                     centerIsTaken = true;
-                }else {
+                } else {
                     return false;
                 }
-            }else if(cinq % 2 != 0){
-                if (!centerIsTaken){
+            } else if (cinq % 2 != 0) {
+                if (!centerIsTaken) {
                     centerIsTaken = true;
-                }else {
+                } else {
                     return false;
                 }
-            }else if(huit % 2 != 0){
-                System.out.println("ici");
-                if (!centerIsTaken){
+            } else if (huit % 2 != 0) {
+                if (!centerIsTaken) {
                     centerIsTaken = true;
-                }else {
+                } else {
                     return false;
                 }
-            }else if (six != neuf){
-                if (!centerIsTaken){
+            } else if (six != neuf) {
+                if (!centerIsTaken && six != 0 && neuf != 0) {
                     centerIsTaken = true;
-                }else {
+                } else {
                     return false;
                 }
             }
@@ -174,9 +165,6 @@ public final class Interview {
         }
         /*
         HashMap map = new HashMap<Integer, String>();
-        if (isIrreversible(listOfNumbers)){
-            return false;
-        }
          */
     }
 }
