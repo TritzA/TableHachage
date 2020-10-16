@@ -8,7 +8,7 @@ public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
     private static final float DEFAULT_LOAD_FACTOR = 0.5f;
     private static final int CAPACITY_INCREASE_FACTOR = 2;
 
-    private Node<KeyType, DataType>[] map;
+    private Node[] map;
     private int size = 0;
     private int capacity;
     private final float loadFactor; // Compression factor
@@ -73,10 +73,7 @@ public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
      * Find the next prime after increasing the capacity by CAPACITY_INCREASE_FACTOR (multiplication)
      */
     private void increaseCapacity() {
-        int n = this.capacity * this.CAPACITY_INCREASE_FACTOR;
-        if (n % 2 == 0) {
-            n++;
-        }
+        int n = this.capacity * this.CAPACITY_INCREASE_FACTOR + 1;
         while (!ispremier(n)) {
             n += 2;
         }
@@ -86,21 +83,14 @@ public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
     private boolean ispremier(int n) {
         if (n < 2) {
             return false;
-        } else if (n < 9) {
-            return true;
-        } else if (n % 3 == 0) {
-            return false;
         } else {
             int r = (int) Math.floor(Math.sqrt(n));
-            int f = 5;
+            int f = 3;
             while (f <= r) {
                 if ((n % f) == 0) {
                     return false;
                 }
-                if ((n % (f + 2)) == 0) {
-                    return false;
-                }
-                f += 6;
+                f += 2;
             }
             return true;
         }
@@ -111,14 +101,14 @@ public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
      * Increases capacity by CAPACITY_INCREASE_FACTOR (multiplication) and
      * reassigns all contained values within the new map
      */
-
     private void rehash() {
         this.increaseCapacity();
         HashMap tempo = new HashMap(this.capacity);
 
         for (Node node : this.map) {
-            if (node != null)
+            if (node != null) {
                 tempo.put(node.key, node.data);
+            }
         }
         this.map = tempo.map;
     }
@@ -140,10 +130,10 @@ public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
                 }
                 node = node.next;
             } while (node != null);
-
         }
         return false;
     }
+
     /**
      * TODO Average Case : O(1)
      * Finds the value attached to a key
@@ -173,19 +163,12 @@ public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
      * @return Old DataType instance at key (null if none existed)
      */
     public DataType put(KeyType key, DataType value) {
-        if (!containsKey(key)) {
-            size++;
-            if (this.needRehash()) {
-                this.rehash();
-            }
-            size--;
-        }
-        Node<KeyType, DataType> node = this.map[this.hash(key)]; // obtient le premier noeud grace à la clé
-        if (node != null) {//collision ou deux clé égale
+
+        Node<KeyType, DataType> node = this.map[this.hash(key)];
+        if (node != null) {
             DataType old = node.data;
             boolean smKey = (node.key.equals(key));
-
-            while (node.next != null && !smKey) { // aller jusqu'au dernier noeud non-vide ou jusqu'à un noeuc ayant la mm clé
+            while (node.next != null && !smKey) {
                 if (node.key.equals(key)) {
                     smKey = true;
                 } else {
@@ -193,17 +176,20 @@ public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
                 }
             }
 
-            // node vaut mtn le denier noeud non-null
             if (smKey) {
                 node.data = value;
             } else {
-                //size++;//-------------------------------------------------------------enlver pour passer 12 teste, ou faire fonctionner le rehash
                 node.next = new Node<>(key, value);
             }
             return old;
-        } else {//pas collision
-            this.map[this.hash(key)] = new Node<>(key, value);// faire fonctionner sans gérer les collisions
+
+
+        } else {
             size++;
+            if (this.needRehash()) {
+                this.rehash();
+            }
+            this.map[this.hash(key)] = new Node<>(key, value);
             return null;
         }
 
@@ -217,26 +203,27 @@ public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
      * @return Old DataType instance at key (null if none existed)
      */
     public DataType remove(KeyType key) {
-        Node<KeyType, DataType> t = this.map[this.hash(key)];
-        Node<KeyType, DataType> p = null;
+        Node<KeyType, DataType> node = this.map[this.hash(key)];
+        Node<KeyType, DataType> prev = null;
 
-        if (t != null && t.key.equals(key)) {
-            this.map[this.hash(key)] = t.next;
+        if (node != null && node.key.equals(key)) {
+            this.map[this.hash(key)] = node.next;
             size--;
-            return t.data;
+            return node.data;
         }
 
-        while (t != null && !t.key.equals(key)) {
-            p = t;
-            t = t.next;
+        while (node != null && !node.key.equals(key)) {
+            prev = node;
+            node = node.next;
         }
 
-        if (t == null)
+        if (node == null) {
             return null;
+        }
 
-        p.next = t.next;
+        prev.next = node.next;
         size--;
-        return t.data;
+        return node.data;
     }
 
     /**
@@ -264,12 +251,13 @@ public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
     public Iterator<KeyType> iterator() {
         return new HashMapIterator();
     }
+
     //"L'itérateur est utilisé dans les tests. Il ne faut pas l'utiliser dans la classe HashMap"
     // Iterators are used to iterate over collections like so:
-// for (Key key : map) { doSomethingWith(key); }
+    // for (Key key : map) { doSomethingWith(key); }
     private class HashMapIterator implements Iterator<KeyType> {
         // TODO: Add any relevant data structures to remember where we are in the list.
-        private int position = 0;//ajout
+        private int posNode = 0;//ajout
         private int posMap = 0;//ajout
 
         /**
@@ -277,10 +265,13 @@ public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
          * Determine if there is a new element remaining in the hashmap.
          */
         public boolean hasNext() {
-            while (map[posMap].next != null) {
-
-            }
-            return position < size;
+            Node<KeyType, DataType> node = map[posMap];
+            do {
+                node = node.next;
+                posNode++;
+            } while (node != null);
+            System.out.println("itérateur ne fonctionne pas");
+            return true;
         }
 
         /**
@@ -288,9 +279,10 @@ public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
          * Return the next new key in the hashmap.
          */
         public KeyType next() {
-            if (hasNext()) {
-                return null;
-            }
+            Node<KeyType, DataType> node = map[posMap];
+            for(int i = 0; i<posNode; i++){
+                node = node.next;
+            } //while (node != null);
             return null;
         }
     }

@@ -212,7 +212,6 @@ class HashMapTest {
 
         for (int i = 0; i < n; ++i) {
             String index = String.valueOf(i);
-            System.out.println("i = " + i);
             map.put("myKey" + index, i);
         }
 
