@@ -20,7 +20,6 @@ public final class Interview {
             if (!(Character.getNumericValue(listOfNumbers.charAt(i)) == 6 && Character.getNumericValue(c) == 9) ||
                     !(Character.getNumericValue(listOfNumbers.charAt(i)) == 9 && Character.getNumericValue(c) == 6)) {
                 if (listOfNumbers.charAt(i) != c) {
-                    System.out.println("l");
                     return false;
                 } else if (Character.getNumericValue(listOfNumbers.charAt(0)) == 6)
                     return false;
@@ -37,12 +36,6 @@ public final class Interview {
         else if (listOfNumbers.contains("4"))
             return true;
         else return listOfNumbers.contains("7");
-    }
-
-    private static boolean bothNotSame(String listOfNumbers, int pos) {
-        int a = Character.getNumericValue(listOfNumbers.charAt(pos));
-        int b = Character.getNumericValue(listOfNumbers.charAt(listOfNumbers.length() - 1 - pos));
-        return a != b;
     }
 
     private static boolean isNumberLigal(char nb) {
