@@ -109,7 +109,6 @@ class HashMapTest {
         boolean canGetAllValues = true;
         for (int i = 0; i < n && canGetAllValues; ++i) {
             Integer value = map.get(new HashMapTest.KeyMock(i));
-            System.out.println(value);
             canGetAllValues = value != null && value.equals(i);
         }
 
@@ -124,6 +123,7 @@ class HashMapTest {
         boolean canRemoveAllValues = true;
         for (int i = 0; i < n && canGetAllValues && canDetectAllKeys && canRemoveAllValues; ++i) {
             Integer removedValue = map.remove(new HashMapTest.KeyMock(staticRandomOrderNums[i]));
+            System.out.println(removedValue);
             canRemoveAllValues = removedValue != null && removedValue.equals(staticRandomOrderNums[i]);
         }
 
@@ -150,7 +150,6 @@ class HashMapTest {
         }
 
         map.clear();
-
         boolean valuesCleared = canGetAllValues && map.isEmpty();
         for (int i = 0; i < n && valuesCleared; ++i) {
             String index = String.valueOf(i);

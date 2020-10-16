@@ -1,7 +1,5 @@
 package tp2;
 
-import org.junit.jupiter.engine.descriptor.TestInstanceLifecycleUtils;
-
 import java.util.Iterator;
 
 public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
@@ -75,10 +73,7 @@ public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
      * Find the next prime after increasing the capacity by CAPACITY_INCREASE_FACTOR (multiplication)
      */
     private void increaseCapacity() {
-        int n = this.capacity * this.CAPACITY_INCREASE_FACTOR;
-        if (n % 2 == 0) {
-            n++;
-        }
+        int n = this.capacity * this.CAPACITY_INCREASE_FACTOR + 1;
         while (!ispremier(n)) {
             n += 2;
         }
@@ -114,9 +109,16 @@ public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
      * reassigns all contained values within the new map
      */
     private void rehash() {
+        this.increaseCapacity();
         HashMap map = new HashMap(this.capacity);
 
-        map.increaseCapacity();
+        System.out.println(this.capacity);
+        for (Node node : this.map) {
+            if (node != null)
+                map.put(node.key, node.data);
+        }
+
+        this.map = map.map;
     }
 
     /**
@@ -127,7 +129,7 @@ public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
      * @return if key is already used in map
      */
     public boolean containsKey(KeyType key) {
-        return false;
+        return this.get(key) != null;
     }
 
     /**
@@ -139,8 +141,14 @@ public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
      */
     public DataType get(KeyType key) {
         Node<KeyType, DataType> t = this.map[this.hash(key)];
-        if(t!=null)
-            return t.data;
+        if (t != null) {
+            do {
+                if (t.key.equals(key)) {
+                    return t.data;
+                }
+                t = t.next;
+            } while (t != null);
+        }
         return null;
     }
 
@@ -152,14 +160,27 @@ public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
      * @return Old DataType instance at key (null if none existed)
      */
     public DataType put(KeyType key, DataType value) {
-        Node<KeyType, DataType> t = this.map[this.hash(key)];
-        if(t!=null) {
-            this.map[this.hash(key)] = new Node<>(key, value);
-            return t.data;
-        }
-        else{
-            this.map[this.hash(key)] = new Node<>(key, value);
+        Node<KeyType, DataType> t = this.map[this.hash(key)]; // obtient le premier noeud grace à la clé
+        if (t != null) {//collision ou deux clé égale
+            DataType old = t.data;
+
+            while (t.next != null && !t.key.equals(key)) { // aller jusqu'au dernier noeud non-vide ou jusqu'à un noeuc ayant la mm clé
+                t = t.next;
+            }
+
+            // node vaut mtn le denier noeud non-null
+            if (t.key.equals(key)) {
+                t.data = value;
+            } else {
+                t.next = new Node<>(key, value);
+            }
+            return old;
+        } else {//pas collision
             size++;
+            if (this.needRehash()) {
+                this.rehash();
+            }
+            this.map[this.hash(key)] = new Node<>(key, value);// faire fonctionner sans gérer les collisions
             return null;
         }
     }
@@ -173,12 +194,25 @@ public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
      */
     public DataType remove(KeyType key) {
         Node<KeyType, DataType> t = this.map[this.hash(key)];
-        if(t!=null) {
-            this.map[this.hash(key)] = null;
+        Node<KeyType, DataType> p = null;
+
+        if (t != null && t.key.equals(key)) {
+            this.map[this.hash(key)] = t.next;
             size--;
             return t.data;
         }
-        return null;
+
+        while (t != null && !t.key.equals(key)) {
+            p = t;
+            t = t.next;
+        }
+
+        if (t == null)
+            return null;
+
+        p.next = t.next;
+        size--;
+        return t.data;
     }
 
     /**
@@ -186,7 +220,8 @@ public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
      * Removes all nodes contained within the map
      */
     public void clear() {
-        
+        this.map = new Node[this.capacity];
+        size = 0;
     }
 
     static class Node<KeyType, DataType> {
@@ -210,13 +245,43 @@ public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
     // for (Key key : map) { doSomethingWith(key); }
     private class HashMapIterator implements Iterator<KeyType> {
         // TODO: Add any relevant data structures to remember where we are in the list.
+        int posmap = 0;
+        private Node<KeyType, DataType> current = map[0];
+        private int expectedModCount = size;
 
         /**
          * TODO Worst Case : O(n)
          * Determine if there is a new element remaining in the hashmap.
          */
         public boolean hasNext() {
-            return false;
+            if (current == null) {
+                while (current == null && posmap < capacity - 1) {
+                    posmap++;
+                    current = map[posmap];
+                }
+
+                if (current == null)
+                    return false;
+
+                if (posmap < size)
+                    return true;
+
+            } else{
+                if (current.next == null) {
+                    do{
+                        posmap++;
+                        current = map[posmap];
+                    }while (current == null && posmap < capacity - 1);
+
+                    if (current == null)
+                        return false;
+
+                    if (posmap < size)
+                        return true;
+
+                }
+            }
+            return true;
         }
 
         /**
@@ -224,7 +289,24 @@ public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
          * Return the next new key in the hashmap.
          */
         public KeyType next() {
-            return null;
+            if (size != expectedModCount)
+                throw new java.util.ConcurrentModificationException();
+
+            if (!hasNext())
+                throw new java.util.NoSuchElementException();
+
+            if (current.next == null) {
+                do{
+                    posmap++;
+                    current = map[posmap];
+                }while (current == null);
+
+                return current.key;
+            }
+
+            KeyType nextItem = current.key;
+            current = current.next;
+            return nextItem;
         }
     }
 }
