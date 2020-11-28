@@ -96,7 +96,6 @@ public final class Interview {
             }
             if ((int) map.get('6') != (int) map.get('9')) {
                 if (!centerIsTaken && (int) map.get('6') != 0 && (int) map.get('9') != 0) {
-                    centerIsTaken = true;
                 } else {
                     return false;
                 }

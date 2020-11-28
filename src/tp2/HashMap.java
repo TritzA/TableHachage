@@ -76,13 +76,13 @@ public class HashMap<KeyType, DataType> implements Iterable<KeyType> {
      */
     private void increaseCapacity() {
         int n = this.capacity * this.CAPACITY_INCREASE_FACTOR + 1;
-        while (!ispremier(n)) {
+        while (!isPrime(n)) {
             n += 2;
         }
         this.capacity = n;
     }
 
-    private boolean ispremier(int n) {
+    private boolean isPrime(int n) {
         if (n < 2) {
             return false;
         } else {
