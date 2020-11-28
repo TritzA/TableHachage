@@ -11,7 +11,7 @@ Partenaire : [Maxence Lefevre](https://github.com/Solonioka)
 
 ## Objectifs
 
-Implémenter une table de hachage à faible complexité algorithmique et l'utiliser pour résoudre un problème.
+Implémenter une table de hachage selon la complexité algorithmique demandée et l'utiliser pour résoudre un problème.
 
 ## Utilisations
 
