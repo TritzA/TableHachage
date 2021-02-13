@@ -1,4 +1,4 @@
-# TableHachage
+# Table-Hachage
 
 Implémentation et utilisation d'une table de hachage.
 
